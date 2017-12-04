@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WakeMeUpWhenMyStopComes</string>
+    <string name="switch1">Vibrate</string>
+    <string name="switch2">Ring</string>
+    <string name="radius">Radius</string>
+    <string name="volume">Volume</string>
+    <string name="set">Set trigger</string>
+</resources>

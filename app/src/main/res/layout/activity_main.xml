@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context="com.crystrom.wakemeupwhenmystopcomes.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_weight="0.4"
+        android:background="@color/colorPrimary"
+        android:elevation="3dp"
+        android:orientation="vertical"
+
+        >
+
+        <TextView
+            style="@style/textFont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/radius" />
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            style="@style/MainActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="20dp"
+
+            />
+
+        <TextView
+            style="@style/textFont"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/volume"
+            android:textAlignment="textStart" />
+
+        <SeekBar
+            android:id="@+id/seekBar2"
+            style="@style/MainActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="20dp" />
+
+        <LinearLayout
+            style="@style/MainActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginRight="10dp"
+                android:layout_weight="0.5"
+                android:text="@string/switch1"
+                android:textColor="@color/textColor" />
+
+            <Switch
+                android:id="@+id/switch2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.5"
+                android:text="@string/switch2"
+                android:textColor="@color/textColor" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/setBtn"
+            style="@style/textFont"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:text="@string/set" />
+
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map1"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        tools:context="crystrom.wakemeupwhenmystopcomes.MainActivity" />
+
+</LinearLayout>
+
+
+
