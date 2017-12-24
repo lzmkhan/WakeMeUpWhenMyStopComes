@@ -5,4 +5,12 @@
     <string name="radius">Radius</string>
     <string name="volume">Volume</string>
     <string name="set">Set trigger</string>
+    <string name="about">About</string>
+    <string name="title_activity_about">AboutActivity</string>
+    <string name="appTitle">WMUWMSC</string>
+    <string name="version">Version 1.0</string>
+    <string name="Dev">Developer: Khan</string>
+    <string name="thanks">Special thanks to Madhu for giving me this idea!</string>
+    <string name="email">Lzmkhan@yahoo.com</string>
+
 </resources>

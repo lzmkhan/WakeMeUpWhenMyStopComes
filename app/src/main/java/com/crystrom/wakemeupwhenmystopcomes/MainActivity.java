@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     GoogleMap mMap;
     LatLng destination;
     Button setBtn;
-    SeekBar volume, radius;
+    SeekBar radius;
     Switch ring, vibrate;
     boolean isRingChecked = false, isVibrateChecked = false;
     LocationManager manager;
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         manager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+
+
 
         radius = (SeekBar) findViewById(R.id.seekBar);
         // Setting max radius of 10 kms
@@ -79,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-
-        volume = (SeekBar) findViewById(R.id.seekBar2);
-        // Setting max volume of 100
-        volume.setMax(100);
 
         ring = (Switch) findViewById(R.id.switch2);
         ring.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -143,6 +143,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     intent.setAction("HODOR");
                                     setBtn.setText("Stop Trigger");
                                     startService(intent);
+                                    // TODO: Start and bound the service. As long as the acitivity is in front,
+                                    // TODO: you should show the current location of user in the shown map.
+                                    // TODO: Once the activity is not visible or home is pressed, the service should
+                                    // TODO: run in the background.
+
+
                                 }
                             } else {
                                 Toast.makeText(MainActivity.this, "Either vibrate or Ring should be selected for us to notify you!", Toast.LENGTH_SHORT).show();
@@ -181,6 +187,45 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.about:
+            // Start the about activity
+            Intent i = new Intent();
+            i.setClass(this, AboutActivity.class);
+            startActivity(i);
+            return(true);
+
+        case R.id.share:
+            //Send the app link in playstore for users to share
+            Intent i1 = new Intent();
+            i1.setAction(Intent.ACTION_SEND);
+            i1.setType("text/plain");
+            String text = " message you want to share..";
+            // change with required  application package
+
+            i1.setPackage("com.whatsapp");
+            i1.setPackage("com.facebook.katana");
+            if (i1 != null) {
+                i1.putExtra(Intent.EXTRA_TEXT, text);//
+                startActivity(Intent.createChooser(i1, text));
+            } else {
+
+                Toast.makeText(this, "App not found", Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+    }
+        return(super.onOptionsItemSelected(item));
+    }
 
     @Override
     public void onLocationChanged(Location location) {

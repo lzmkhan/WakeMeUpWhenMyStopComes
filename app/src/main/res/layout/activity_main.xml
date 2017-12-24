@@ -13,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
-        android:layout_weight="0.4"
-        android:background="@color/colorPrimary"
+        android:paddingTop="16dp"
+        android:layout_weight="0.3"
+        android:background="@color/colorPrimaryDark"
         android:elevation="3dp"
         android:orientation="vertical"
 
@@ -35,21 +36,6 @@
             android:layout_marginRight="20dp"
 
             />
-
-        <TextView
-            style="@style/textFont"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/volume"
-            android:textAlignment="textStart" />
-
-        <SeekBar
-            android:id="@+id/seekBar2"
-            style="@style/MainActivity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="20dp" />
 
         <LinearLayout
             style="@style/MainActivity"
@@ -96,7 +82,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.6"
+        android:layout_weight="0.7"
         tools:context="crystrom.wakemeupwhenmystopcomes.MainActivity" />
 
 </LinearLayout>

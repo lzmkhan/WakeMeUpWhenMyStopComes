@@ -1,15 +1,18 @@
 package com.crystrom.wakemeupwhenmystopcomes;
 
-import android.app.IntentService;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 
 import com.google.android.gms.location.LocationListener;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
@@ -26,9 +29,9 @@ import com.google.android.gms.location.LocationServices;
  * Created by Marcus Khan on 12/4/2017.
  */
 
-public class LocationListenerService extends IntentService implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class LocationListenerService extends Service implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-
+    static int startIds = 0;
     GoogleApiClient googleApi;
     Location destination;
     int radius;
@@ -40,18 +43,12 @@ public class LocationListenerService extends IntentService implements LocationLi
     boolean stopService = false;
 
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * name Used to name the worker thread, important only for debugging.
-     */
-    public LocationListenerService() {
-        super("location Service listener");
-    }
-
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.i("service", "In onStartCommand");
+
         if(intent.getAction().equals("KILL_SERVICE")){
+            Log.d("Service","Killing service intent obtained");
             stopService = true;
             if(googleApi != null){
                 if(googleApi.isConnected() == true){
@@ -60,8 +57,12 @@ public class LocationListenerService extends IntentService implements LocationLi
                 }
             }
             mNotifyMgr.cancelAll();
-            stopService(new Intent(this, LocationListenerService.class));
+            stopService(new Intent(getBaseContext(), LocationListenerService.class));
+            this.stopSelf(startIds);
+
         }else {
+            startIds = startId;
+            Log.d("Service Intent", "Starting a service");
             vibrate = intent.getExtras().getBoolean("vibrate");
             ring = intent.getExtras().getBoolean("ring");
 
@@ -77,7 +78,7 @@ public class LocationListenerService extends IntentService implements LocationLi
             Log.d("vibrate", vibrate + "");
             Log.d("ring", ring + "");
         }
-
+        return START_STICKY;
     }
 
     @Override
@@ -117,33 +118,47 @@ public class LocationListenerService extends IntentService implements LocationLi
 
         Log.d("Current location", "Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude());
         // Once the current location is inside the radius in meters, wake up the user.
-        if (destination.distanceTo(location) < (radius * 1000)) {
-            // TODO: Ring and vibrate and show notification.
-            // TODO: Once the user clicks on notification and kills it.
-            // TODO: Kill this service
 
-            Intent intent = new Intent(this, LocationListenerService.class);
-            intent.setAction("KILL_SERVICE");
-            PendingIntent pIntent = PendingIntent.getService(this,
-                    (int) System.currentTimeMillis(), intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+        if(destination != null) {
+            if (destination.distanceTo(location) < (radius * 500)) {
+                Log.d("Distance to destination", "" + destination.distanceTo(location));
+                // TODO: Ring and vibrate and show notification.
+                // TODO: Once the user clicks on notification and kills it.
+                // TODO: Kill this service
 
-            mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_location_searching_black_24px)
-                    .setContentTitle("Location Alarm Triggered!")
-                    .setContentText("you are nearing your destination. Please wake up ;)")
-                    .setOngoing(false)
-                    .setPriority(NotificationCompat.PRIORITY_MAX)
-                    .setAutoCancel(true)
-                    .setLights(Color.BLUE,200,200)
-                    .addAction(R.drawable.ic_location_searching_black_24px,"Discard notification", pIntent);
+                Intent intent = new Intent(this, LocationListenerService.class);
+                intent.setAction("KILL_SERVICE");
+                PendingIntent pIntent = PendingIntent.getService(this,
+                        (int) System.currentTimeMillis(), intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_location_searching_black_24px)
+                        .setContentTitle("Location Alarm Triggered!")
+                        .setContentText("you are nearing your destination. Please wake up ;)")
+                        .setOngoing(false)
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setAutoCancel(true)
+                        .setLights(Color.BLUE, 200, 200)
+                        .addAction(R.drawable.ic_location_searching_black_24px, "Discard notification", pIntent);
 
 
+                if(vibrate == true){
+                    mBuilder.setVibrate(new long[]{2000, 2000, 2000, 2000, 2000});
+                }
+
+                if(ring == true){
+                    mBuilder.setSound(Uri.parse("android.resource://com.crystrom.wakemeupwhenmystopcomes/" + R.raw.alarm));
+
+                }
+
+                mBuilder.setDeleteIntent(pIntent);
 
 
-            // Builds the notification and issues it.
-            Log.d("LocationServiceMsg","location reached!");
-            mNotifyMgr.notify(mNotificationId, mBuilder.build());
+                // Builds the notification and issues it.
+                Log.d("LocationServiceMsg", "location reached!");
+                mNotifyMgr.notify(mNotificationId, mBuilder.build());
+            }
         }
 
 
@@ -201,4 +216,9 @@ public class LocationListenerService extends IntentService implements LocationLi
     }
 
 
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
 }
