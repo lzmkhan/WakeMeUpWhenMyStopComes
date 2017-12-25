@@ -12,5 +12,6 @@
     <string name="Dev">Developer: Khan</string>
     <string name="thanks">Special thanks to Madhu for giving me this idea!</string>
     <string name="email">Lzmkhan@yahoo.com</string>
+    <string name="disclaimer">This app does not collect any information. You can use it offline too!</string>
 
 </resources>

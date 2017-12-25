@@ -21,7 +21,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".LocationListenerService" />
+        <service
+            android:name=".LocationListenerService"
+/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
